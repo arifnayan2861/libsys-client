@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
+import axios from "axios";
 
 import { AuthContext } from "../../context/AuthProvider";
 import toast from "react-hot-toast";
@@ -37,6 +38,16 @@ const Register = () => {
         photoURL: data.photoUrl,
       });
       setUser({ ...user, photoURL: data.photoUrl, displayName: data.name });
+      axios
+        .post("http://localhost:5000/users", {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          photoUrl: data.photoUrl,
+          role: "user",
+        })
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error.message));
       toast.success("Regsitration successful!");
       navigate("/");
     } catch (error) {
