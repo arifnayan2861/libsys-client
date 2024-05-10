@@ -5,6 +5,7 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Regsiter/Register";
 import AddBook from "../pages/AddBook/AddBook";
+import BooksByCategory from "../pages/BooksByCategory/BooksByCategory";
 
 const routes = createBrowserRouter([
   {
@@ -26,6 +27,12 @@ const routes = createBrowserRouter([
       {
         path: "/add-book",
         element: <AddBook />,
+      },
+      {
+        path: "/books/:category",
+        element: <BooksByCategory />,
+        loader: ({ params }) =>
+          fetch(`${import.meta.env.VITE_BACKEND_URL}/books/${params.category}`),
       },
     ],
   },

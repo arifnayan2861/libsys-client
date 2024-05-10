@@ -11,7 +11,7 @@ const AddBook = () => {
 
   const handleAddBook = (data) => {
     axios
-      .post("http://localhost:5000/add-book", {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/add-book`, {
         bookName: data.bookName,
         img: data.imgUrl,
         quantity: data.quantity,

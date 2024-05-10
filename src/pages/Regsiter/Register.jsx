@@ -39,7 +39,7 @@ const Register = () => {
       });
       setUser({ ...user, photoURL: data.photoUrl, displayName: data.name });
       axios
-        .post("http://localhost:5000/users", {
+        .post(`${import.meta.env.VITE_BACKEND_URL}/users`, {
           name: data.name,
           email: data.email,
           password: data.password,
