@@ -8,11 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 
 import { AuthContext } from "../../context/AuthProvider";
+import toast from "react-hot-toast";
 
 const BookDetails = () => {
   const { user } = useContext(AuthContext);
   const [modal, setModal] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
   const book = useLoaderData();
   const navigate = useNavigate();
   const {
@@ -24,7 +25,7 @@ const BookDetails = () => {
   // console.log(book);
   const handleBorrow = async () => {
     try {
-      const { data } = await axios.put(
+      await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/book/${book._id}/borrow`,
         {
           bookId: book._id,
@@ -34,12 +35,12 @@ const BookDetails = () => {
           quantity: parseInt(book.quantity),
           userName: user?.displayName,
           userEmail: user?.email,
-          borrowedDate: new Date(),
-          returnDate: startDate,
+          borrowedDate: new Date().toLocaleDateString(),
+          returnDate: startDate.toLocaleDateString(),
         }
       );
+      toast.success("Book borrowed successfully!");
       navigate("/borrowed-books");
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
