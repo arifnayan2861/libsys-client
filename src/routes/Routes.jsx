@@ -10,6 +10,7 @@ import BookDetails from "../pages/BookDetails/BookDetails";
 import BorrowedBooks from "../pages/BorrowedBooks/BorrowedBooks";
 import AllBooks from "../pages/AllBooks/AllBooks";
 import UpdateBook from "../pages/UpdateBook/UpdateBook";
+import PrivateRoute from "./PrivateRoute";
 
 const routes = createBrowserRouter([
   {
@@ -34,11 +35,19 @@ const routes = createBrowserRouter([
       },
       {
         path: "/update-book/:id",
-        element: <UpdateBook />,
+        element: (
+          <PrivateRoute>
+            <UpdateBook />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/add-book",
-        element: <AddBook />,
+        element: (
+          <PrivateRoute>
+            <AddBook />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/borrowed-books",
@@ -52,7 +61,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "/book/:id",
-        element: <BookDetails />,
+        element: (
+          <PrivateRoute>
+            <BookDetails />
+          </PrivateRoute>
+        ),
         loader: ({ params }) =>
           fetch(`${import.meta.env.VITE_BACKEND_URL}/book/${params.id}`),
       },
