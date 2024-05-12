@@ -11,11 +11,13 @@ import BorrowedBooks from "../pages/BorrowedBooks/BorrowedBooks";
 import AllBooks from "../pages/AllBooks/AllBooks";
 import UpdateBook from "../pages/UpdateBook/UpdateBook";
 import PrivateRoute from "./PrivateRoute";
+import ErrorPage from "../pages/Error/ErrorPage";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -51,7 +53,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "/borrowed-books",
-        element: <BorrowedBooks />,
+        element: (
+          <PrivateRoute>
+            <BorrowedBooks />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/books/:category",
