@@ -10,6 +10,7 @@ import {
 import PropTypes from "prop-types";
 
 import auth from "../../firebase.config";
+import axios from "axios";
 
 export const AuthContext = createContext(null);
 
@@ -40,8 +41,26 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const userEmail = currentUser?.email || user?.email;
+      const loggedUser = { email: userEmail };
+      console.log(currentUser);
       setUser(currentUser);
       setLoading(false);
+      if (currentUser) {
+        axios
+          .post(`${import.meta.env.VITE_BACKEND_URL}/jwt`, loggedUser, {
+            withCredentials: true,
+          })
+          .then((res) => console.log(res.data))
+          .catch((error) => console.log(error));
+      } else {
+        axios
+          .post(`${import.meta.env.VITE_BACKEND_URL}/logout`, loggedUser, {
+            withCredentials: true,
+          })
+          .then((res) => console.log(res.data))
+          .catch((error) => console.log(error));
+      }
     });
     return () => {
       unSubscribe();

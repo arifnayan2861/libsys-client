@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 import Card from "./Card";
 
 const AllBooks = () => {
@@ -7,7 +8,10 @@ const AllBooks = () => {
 
   const getData = async () => {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/all-books`
+      `${import.meta.env.VITE_BACKEND_URL}/all-books`,
+      {
+        withCredentials: true,
+      }
     );
     setBooks(data);
   };

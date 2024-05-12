@@ -11,15 +11,19 @@ const AddBook = () => {
 
   const handleAddBook = (data) => {
     axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/add-book`, {
-        bookName: data.bookName,
-        img: data.imgUrl,
-        quantity: data.quantity,
-        description: data.description,
-        authorName: data.authorName,
-        category: data.category,
-        rating: data.rating,
-      })
+      .post(
+        `${import.meta.env.VITE_BACKEND_URL}/add-book`,
+        { withCredentials: true },
+        {
+          bookName: data.bookName,
+          img: data.imgUrl,
+          quantity: data.quantity,
+          description: data.description,
+          authorName: data.authorName,
+          category: data.category,
+          rating: data.rating,
+        }
+      )
       .then((res) => {
         console.log(res.data);
         toast.success("Book added successfully!");
