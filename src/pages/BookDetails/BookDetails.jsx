@@ -1,14 +1,13 @@
 import { useContext, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import StarRatings from "react-star-ratings";
 import { RxCrossCircled } from "react-icons/rx";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import { AuthContext } from "../../context/AuthProvider";
-import toast from "react-hot-toast";
 
 const BookDetails = () => {
   const { user } = useContext(AuthContext);
@@ -24,26 +23,24 @@ const BookDetails = () => {
 
   // console.log(book);
   const handleBorrow = async () => {
-    try {
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/book/${book._id}/borrow`,
-        {
-          bookId: book._id,
-          bookName: book.bookName,
-          img: book.img,
-          category: book.category,
-          quantity: parseInt(book.quantity),
-          userName: user?.displayName,
-          userEmail: user?.email,
-          borrowedDate: new Date().toLocaleDateString(),
-          returnDate: startDate.toLocaleDateString(),
-        }
-      );
-      toast.success("Book borrowed successfully!");
-      navigate("/borrowed-books");
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .put(`${import.meta.env.VITE_BACKEND_URL}/book/${book._id}/borrow`, {
+        bookId: book._id,
+        bookName: book.bookName,
+        img: book.img,
+        category: book.category,
+        quantity: parseInt(book.quantity),
+        userName: user?.displayName,
+        userEmail: user?.email,
+        borrowedDate: new Date().toLocaleDateString(),
+        returnDate: startDate.toLocaleDateString(),
+      })
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Book borrowed successfully!");
+        navigate("/borrowed-books");
+      })
+      .catch((error) => console.log(error));
   };
   return (
     <div className="w-[80%] max-w-screen-xl mx-auto mt-14">
@@ -80,17 +77,18 @@ const BookDetails = () => {
           </div>
           <p className="my-4">Available: {book.quantity}</p>
           <hr className="my-4" />
-          <StarRatings
+          {/* <StarRatings
             starEmptyColor="orange"
             numberOfStars={parseInt(book.rating)}
             name="rating"
             starDimension="20px"
             starSpacing="1px"
-          />
+          /> */}
           <div className="mt-8">
             <button
+              disabled={book.quantity <= 0}
               onClick={() => setModal(true)}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-500"
             >
               Borrow
             </button>
