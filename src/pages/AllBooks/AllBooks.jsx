@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Card from "../BooksByCategory/Card";
+import Card from "./Card";
 
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
+
   const getData = async () => {
     const { data } = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/all-books`
@@ -14,7 +15,7 @@ const AllBooks = () => {
   useEffect(() => {
     getData();
   }, []);
-  console.log(books);
+  //   console.log(books);
   return (
     <div className="w-[80%] max-w-screen-xl mx-auto mt-14">
       <h1 className="text-3xl md:text-5xl text-center dark:text-white font-bold mb-10">
