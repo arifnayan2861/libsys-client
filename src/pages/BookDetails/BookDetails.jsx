@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { RxCrossCircled } from "react-icons/rx";
 import { useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { AuthContext } from "../../context/AuthProvider";
 const BookDetails = () => {
   const { user } = useContext(AuthContext);
   const [modal, setModal] = useState(false);
+  const [books, setBooks] = useState([]);
   const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
   const book = useLoaderData();
   const navigate = useNavigate();
@@ -21,10 +22,33 @@ const BookDetails = () => {
     formState: { errors },
   } = useForm();
 
+  const getData = async () => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/borrowed-books/${user?.email}`
+    );
+    setBooks(data);
+  };
+
   // console.log(book);
-  const handleBorrow = async () => {
-    await axios
-      .put(`${import.meta.env.VITE_BACKEND_URL}/book/${book._id}/borrow`, {
+  const handleBorrow = (_id) => {
+    try {
+      axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/borrowed-books/${user?.email}`
+      );
+
+      if (books.length > 3) {
+        toast.error("Can not borrow more than 3 books");
+        return;
+      }
+
+      for (let book of books) {
+        if (book.bookId == _id) {
+          toast.error("You already borrowed this book");
+          return;
+        }
+      }
+
+      axios.put(`${import.meta.env.VITE_BACKEND_URL}/book/borrow/${_id}`, {
         bookId: book._id,
         bookName: book.bookName,
         img: book.img,
@@ -34,14 +58,21 @@ const BookDetails = () => {
         userEmail: user?.email,
         borrowedDate: new Date().toLocaleDateString(),
         returnDate: startDate.toLocaleDateString(),
-      })
-      .then((res) => {
-        console.log(res.data);
-        toast.success("Book borrowed successfully!");
-        navigate("/borrowed-books");
-      })
-      .catch((error) => console.log(error));
+      });
+
+      getData();
+
+      toast.success("Book borrowed successfully!");
+      navigate("/borrowed-books");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className="w-[80%] max-w-screen-xl mx-auto mt-14">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -77,13 +108,6 @@ const BookDetails = () => {
           </div>
           <p className="my-4">Available: {book.quantity}</p>
           <hr className="my-4" />
-          {/* <StarRatings
-            starEmptyColor="orange"
-            numberOfStars={parseInt(book.rating)}
-            name="rating"
-            starDimension="20px"
-            starSpacing="1px"
-          /> */}
           <div className="mt-8">
             <button
               disabled={book.quantity <= 0}
@@ -109,7 +133,7 @@ const BookDetails = () => {
           <div>
             <form
               className="w-[80%] max-w-sm mx-auto mt-10"
-              onSubmit={handleSubmit(handleBorrow)}
+              onSubmit={() => handleSubmit(handleBorrow(book._id))}
             >
               <div className="mb-5">
                 <label

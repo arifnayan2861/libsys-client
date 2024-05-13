@@ -33,7 +33,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "/all-books",
-        element: <AllBooks />,
+        element: (
+          <PrivateRoute>
+            <AllBooks />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/update-book/:id",

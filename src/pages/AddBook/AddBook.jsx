@@ -9,11 +9,11 @@ const AddBook = () => {
     formState: { errors },
   } = useForm();
 
-  const handleAddBook = (data) => {
-    axios
+  const handleAddBook = async (data) => {
+    await axios
       .post(
         `${import.meta.env.VITE_BACKEND_URL}/add-book`,
-        { withCredentials: true },
+
         {
           bookName: data.bookName,
           img: data.imgUrl,
@@ -22,7 +22,8 @@ const AddBook = () => {
           authorName: data.authorName,
           category: data.category,
           rating: data.rating,
-        }
+        },
+        { withCredentials: true }
       )
       .then((res) => {
         console.log(res.data);
