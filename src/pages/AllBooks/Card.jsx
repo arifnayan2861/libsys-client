@@ -2,9 +2,27 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import { FaPencilAlt } from "react-icons/fa";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+
+import { AuthContext } from "../../context/AuthProvider";
 
 const Card = ({ book }) => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/current-user/${user?.email}`
+      );
+      setCurrentUser(data);
+    };
+    getData();
+  }, []);
+
+  // console.log(currentUser);
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -18,13 +36,13 @@ const Card = ({ book }) => {
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center justify-between space-x-1 rtl:space-x-reverse">
             <div className="flex items-center">
-              {/* <StarRatings
+              <StarRatings
                 starEmptyColor="orange"
                 numberOfStars={parseInt(book.rating)}
                 name="rating"
                 starDimension="20px"
                 starSpacing="1px"
-              /> */}
+              />
             </div>
             <div>
               <span
@@ -50,8 +68,9 @@ const Card = ({ book }) => {
             {book.authorName}
           </span>
           <button
+            disabled={currentUser?.role !== "librarian"}
             onClick={() => navigate(`/update-book/${book._id}`)}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-500 disabled:hover:bg-gray-500"
           >
             <FaPencilAlt size={15} />
           </button>

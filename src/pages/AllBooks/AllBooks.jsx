@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { IoMenu } from "react-icons/io5";
 import { CiGrid41 } from "react-icons/ci";
 import { FaPencilAlt } from "react-icons/fa";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 
 import Card from "./Card";
+import { AuthContext } from "../../context/AuthProvider";
 
 const AllBooks = () => {
+  const { user } = useContext(AuthContext);
   const [books, setBooks] = useState([]);
   const [tableView, setTableView] = useState(true);
+  const [currentUser, setCurrentUser] = useState({});
   const navigate = useNavigate();
   // const books = useLoaderData();
   const getData = async () => {
@@ -23,8 +26,16 @@ const AllBooks = () => {
     setBooks(data);
   };
 
+  const getUser = async () => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/current-user/${user?.email}`
+    );
+    setCurrentUser(data);
+  };
+
   useEffect(() => {
     getData();
+    getUser();
   }, []);
 
   const handleFilter = async () => {
@@ -123,20 +134,21 @@ const AllBooks = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      {/* <StarRatings
+                      <StarRatings
                         starEmptyColor="orange"
                         numberOfStars={parseInt(book.rating)}
                         name="rating"
                         starDimension="20px"
                         starSpacing="1px"
-                      /> */}
+                      />
                     </div>
                   </td>
                   <td className="px-6 py-4">{book.authorName}</td>
                   <td className="px-6 py-4">
                     <button
+                      disabled={currentUser?.role !== "librarian"}
                       onClick={() => navigate(`/update-book/${book._id}`)}
-                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-gray-500 disabled:hover:bg-gray-500"
                     >
                       <FaPencilAlt size={15} />
                     </button>
