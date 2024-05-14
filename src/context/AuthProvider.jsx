@@ -43,25 +43,46 @@ const AuthProvider = ({ children }) => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       const userEmail = currentUser?.email || user?.email;
       const loggedUser = { email: userEmail };
-      console.log(currentUser);
+      // console.log(currentUser);
       setUser(currentUser);
       setLoading(false);
       if (currentUser) {
+        //   axios
+        //     .post(`${import.meta.env.VITE_BACKEND_URL}/jwt`, loggedUser, {
+        //       withCredentials: true,
+        //     })
+        //     .then((res) => console.log(res.data))
+        //     .catch((error) => console.log(error));
+        // } else {
+        //   axios
+        //     .post(`${import.meta.env.VITE_BACKEND_URL}/logout`, loggedUser, {
+        //       withCredentials: true,
+        //     })
+        //     .then((res) => console.log(res.data))
+        //     .catch((error) => console.log(error));
+
         axios
           .post(`${import.meta.env.VITE_BACKEND_URL}/jwt`, loggedUser, {
             withCredentials: true,
           })
-          .then((res) => console.log(res.data))
+          .then((res) => {
+            setUser(currentUser);
+            setLoading(false);
+          })
           .catch((error) => console.log(error));
       } else {
         axios
           .post(`${import.meta.env.VITE_BACKEND_URL}/logout`, loggedUser, {
             withCredentials: true,
           })
-          .then((res) => console.log(res.data))
+          .then((res) => {
+            setUser(null);
+            setLoading(false);
+          })
           .catch((error) => console.log(error));
       }
     });
+
     return () => {
       unSubscribe();
     };

@@ -3,16 +3,16 @@ import axios from "axios";
 import { IoMenu } from "react-icons/io5";
 import { CiGrid41 } from "react-icons/ci";
 import { FaPencilAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import StarRatings from "react-star-ratings";
 
 import Card from "./Card";
-import StarRatings from "react-star-ratings";
 
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [tableView, setTableView] = useState(true);
   const navigate = useNavigate();
-
+  // const books = useLoaderData();
   const getData = async () => {
     const { data } = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/all-books`,
@@ -93,25 +93,6 @@ const AllBooks = () => {
               </tr>
             </thead>
             <tbody>
-              {/* <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Apple MacBook Pro 17
-                </th>
-                <td className="px-6 py-4">Silver</td>
-                <td className="px-6 py-4">Laptop</td>
-                <td className="px-6 py-4">$2999</td>
-                <td className="px-6 py-4">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </a>
-                </td>
-              </tr> */}
               {books.map((book) => (
                 <tr
                   key={book._id}
@@ -142,13 +123,13 @@ const AllBooks = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <StarRatings
+                      {/* <StarRatings
                         starEmptyColor="orange"
                         numberOfStars={parseInt(book.rating)}
                         name="rating"
                         starDimension="20px"
                         starSpacing="1px"
-                      />
+                      /> */}
                     </div>
                   </td>
                   <td className="px-6 py-4">{book.authorName}</td>

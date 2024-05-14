@@ -12,6 +12,7 @@ import AllBooks from "../pages/AllBooks/AllBooks";
 import UpdateBook from "../pages/UpdateBook/UpdateBook";
 import PrivateRoute from "./PrivateRoute";
 import ErrorPage from "../pages/Error/ErrorPage";
+import axios from "axios";
 
 const routes = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const routes = createBrowserRouter([
             <AllBooks />
           </PrivateRoute>
         ),
+        // loader: () =>
+        //   axios.get(`${import.meta.env.VITE_BACKEND_URL}/all-books`, {
+        //     withCredentials: true,
+        //   }),
       },
       {
         path: "/update-book/:id",

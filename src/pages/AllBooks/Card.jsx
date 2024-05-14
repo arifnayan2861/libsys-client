@@ -18,13 +18,13 @@ const Card = ({ book }) => {
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center justify-between space-x-1 rtl:space-x-reverse">
             <div className="flex items-center">
-              <StarRatings
+              {/* <StarRatings
                 starEmptyColor="orange"
                 numberOfStars={parseInt(book.rating)}
                 name="rating"
                 starDimension="20px"
                 starSpacing="1px"
-              />
+              /> */}
             </div>
             <div>
               <span
