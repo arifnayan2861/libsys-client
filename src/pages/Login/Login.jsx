@@ -1,11 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/AuthProvider";
+import axios from "axios";
 
 const Login = () => {
+  const [users, setUsers] = useState([]);
   const { loginUser, loginWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
   const {
@@ -14,8 +16,20 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/all-users`)
+      .then((res) => setUsers(res.data))
+      .catch((error) => console.log(error));
+  }, []);
+
   const handleLogin = async (data) => {
     try {
+      const existingUser = users.find((user) => user.email === data.email);
+      if (!existingUser) {
+        toast.error("User does not exist!");
+        return;
+      }
       await loginUser(data.email, data.password);
       toast.success("Login successful!");
       navigate(location?.state ? location.state : "/");
