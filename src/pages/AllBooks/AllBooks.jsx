@@ -44,7 +44,7 @@ const AllBooks = () => {
         `${import.meta.env.VITE_BACKEND_URL}/filtered-books`
       );
       setBooks(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }

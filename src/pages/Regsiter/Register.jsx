@@ -38,16 +38,13 @@ const Register = () => {
         photoURL: data.photoUrl,
       });
       setUser({ ...user, photoURL: data.photoUrl, displayName: data.name });
-      axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/users`, {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          photoUrl: data.photoUrl,
-          role: "user",
-        })
-        .then((res) => console.log(res))
-        .catch((error) => console.log(error.message));
+      axios.post(`${import.meta.env.VITE_BACKEND_URL}/users`, {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        photoUrl: data.photoUrl,
+        role: "user",
+      });
       toast.success("Regsitration successful!");
       navigate("/");
     } catch (error) {

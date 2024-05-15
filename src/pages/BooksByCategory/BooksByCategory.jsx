@@ -3,7 +3,7 @@ import Card from "./Card";
 
 const BooksByCategory = () => {
   const books = useLoaderData();
-  console.log(books);
+  // console.log(books);
   return (
     <div className="w-[80%] max-w-screen-xl mx-auto mt-14">
       <h1 className="text-3xl md:text-5xl text-center dark:text-white font-bold mb-10">

@@ -1,8 +1,27 @@
-# React + Vite
+# LibSys
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a library management system MERN website frontend, that consists of features such as,
 
-Currently, two official plugins are available:
+- Admin panel
+- Book addition
+- Book borrowing system
+- Book returning system
+- Firebase authentication
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This website uses packages like,
+
+- React-router-dom
+- Tailwind CSS
+- Daisy UI
+- Swiper Slider
+- Firebase
+- React-hook-form
+- React-datepicker
+- axios
+
+Live site: https://libsys-7ee11.web.app/
+
+#### Librarian Role data
+
+E-mail: librarian@library.com
+Password: Abcdef!

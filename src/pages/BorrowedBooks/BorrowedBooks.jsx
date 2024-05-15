@@ -25,7 +25,7 @@ const BorrowedBooks = () => {
       const { data } = axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/borrowed-books/${email}/${id}`
       );
-      console.log(data);
+      // console.log(data);
       getData();
       toast.success("Book returned successfully!");
     } catch (error) {
